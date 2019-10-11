@@ -1,0 +1,12 @@
+﻿@{ 
+    string currentController = Convert.ToString(HttpContext.Current.Request.RequestContext.RouteData.Values["Controller"]);
+    string layout = "";
+    switch (currentController)
+    {
+        default:
+            layout = "~/Views/Shared/_Layout.cshtml";
+            break;
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
