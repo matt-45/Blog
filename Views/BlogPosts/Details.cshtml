@@ -78,51 +78,71 @@
                     <div class="comment-list">
                         @foreach (var comment in Model.Comments)
                         {
-                            <div class="single-comment justify-content-between d-flex">
-                                <div class="user justify-content-between d-flex">
-                                    <div class="thumb">
-                                        <img src="img/blog/c1.jpg" alt="">
+                            if (comment.Author != null)
+                            {
+                                <div class="single-comment justify-content-between d-flex">
+                                    <div class="user justify-content-between d-flex">
+                                        <div class="thumb">
+                                            <img src="img/blog/c1.jpg" alt="">
+                                        </div>
+                                        <div class="desc">
+                                            <h5><a href="#">@comment.Author.DisplayName</a></h5>
+                                            <p class="date">@comment.Created.ToString("MM/dd/yyyy hh:mm tt")</p>
+                                            <p class="comment">
+                                                @comment.CommentBody
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="desc">
-                                        <h5><a href="#">@comment.Author.DisplayName</a></h5>
-                                        <p class="date">@comment.Created.ToString("MM/dd/yyyy hh:mm tt")</p>
-                                        <p class="comment">
-                                            @comment.CommentBody
-                                        </p>
-                                    </div>
+                                    @*<div class="reply-btn">
+                        <a href="" class="btn-reply text-uppercase">reply</a>
+                    </div>*@
                                 </div>
-                                @*<div class="reply-btn">
-                                    <a href="" class="btn-reply text-uppercase">reply</a>
-                                </div>*@
-                            </div>
+                            }
                         }
 
                     </div>
                 </div>
 
                 <div class="comment-form">
-                    <h4>Leave a Reply</h4>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <h4>Leave a Reply</h4>
+                    }
+                    else
+                    {
+                        <h4>Login to reply.</h4>
+                    }
+
                     @using (Html.BeginForm("Create", "Comments", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         @Html.Hidden("BlogPostId", Model.Id)
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="form-group">
+                                @Html.TextArea("commentBody", new
+                                    {
+                                       @class = "form-control mb-10",
+                                       @rows = "5",
+                                       @name = "message",
+                                       @placeholder = "MESSAGE",
+                                       @onfocus = "this.placeholder = ''",
+                                       @onblur = "this.placeholder = 'MESSAGE'",
+                                       @required = "",
+                                       @style = "text-transform: none"
+                                    })
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Post Comment" class="button submit_btn" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                <a class="button submit_btn" href=@Url.Action("Login", "Account")>Login</a>
+                            </div>
+                        }
 
-                        <div class="form-group">
-                            @Html.TextArea("commentBody", new 
-                                { 
-                                   @class = "form-control mb-10",
-                                   @rows = "5",
-                                   @name = "message",
-                                   @placeholder = "MESSAGE",
-                                   @onfocus = "this.placeholder = ''" ,
-                                   @onblur = "this.placeholder = 'MESSAGE'" ,
-                                   @required = "",
-                                   @style = "text-transform: none"
-                                })
-                        </div>
-                        <div class="form-group">
-                            <input type="submit" value="Post Comment" class="button submit_btn"/>
-                        </div>
                     }
                     @*<form>
             <div class="form-group">

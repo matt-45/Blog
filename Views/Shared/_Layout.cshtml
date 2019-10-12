@@ -59,19 +59,18 @@
                             <!--<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>-->
                             @if (!User.Identity.IsAuthenticated)
                             {
-                                <li class="nav-item" style="float: right"><a class="nav-link" href="~/Account/Login">Login</a></li>
-                                <li class="nav-item" style="float: right"><a class="nav-link" href="~/Account/Register">Register</a></li>
+                                <li class="nav-item" style="float: right"><a class="nav-link" href=@Url.Action("Login", "Account")>Login</a></li>
+                                <li class="nav-item" style="float: right"><a class="nav-link" href=@Url.Action("Register", "Account")>Register</a></li>
                             }
                             else
                             {
                                 <li class="nav-item" style="float: right"><a class="nav-link" href="">@userDisplayName</a></li>
-                                <li class="nav-item" style="float: right"><a class="nav-link" href=@Url.Action("CustomLogOff", "Account")>LogOut</a></li>
+                                <li class="nav-item" style="float: right"><a class="nav-link" href=@Url.Action("CustomLogOff", "Account")>Log Off</a></li>
                             }
                             @if (User.IsInRole("Admin"))
                             {
-                                <li class="nav-item" style="float: right">@Html.ActionLink("Admin Portal", "BlogPosts", null, new { @class = "nav-link"})</li>
-                                <li class="nav-item" style="float: right"><a class="nav-link" href="@Url.Action("Index", "BlogPosts")">Admin Portal</a></li>
-                                }
+                                <li class="nav-item" style="float: right">@Html.ActionLink("Admin Portal", "Index", "BlogPosts", null, new { @class = "nav-link"})</li>
+                            }
 
                             </ul>
                         <ul class="nav navbar-nav navbar-right navbar-social">
