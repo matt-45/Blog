@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Blog.Models
 {
@@ -12,6 +13,7 @@ namespace Blog.Models
         public int BlogPostId { get; set; }
         public string AuthorId { get; set; }
 
+        [AllowHtml]
         [Display(Name="Post Body")]
         public string CommentBody { get; set; }
 

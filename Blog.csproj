@@ -195,6 +195,9 @@
     <Content Include="Images\blog2.png" />
     <Content Include="Images\hero-banner.png" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\blog4.png" />
+    <Content Include="Images\next.jpg" />
+    <Content Include="Images\prev.jpg" />
     <Content Include="Images\Thumb\thumb-card1.png" />
     <Content Include="Images\Thumb\thumb-card2.png" />
     <Content Include="Images\Thumb\thumb-card3.png" />
@@ -206,6 +209,7 @@
     <Content Include="Images\Thumb\thumb1.png" />
     <Content Include="Images\Thumb\thumb2.png" />
     <Content Include="Images\Thumb\thumb3.png" />
+    <Content Include="Images\user-img.png" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\CustomJS.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />

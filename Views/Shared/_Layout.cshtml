@@ -55,7 +55,7 @@
                                     <li class="nav-item"><a class="nav-link" href="blog-details.html">Tutorials</a></li>
                                 </ul>
                             </li>
-                            <li class="nav-item" ><a class="nav-link active-archive" href="~/BlogPosts/Archive">Archive</a></li>
+                            <li class="nav-item"><a class="nav-link active-archive" href="~/BlogPosts/Archive">Archive</a></li>
                             <!--<li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>-->
                             @if (!User.Identity.IsAuthenticated)
                             {
@@ -69,10 +69,11 @@
                             }
                             @if (User.IsInRole("Admin"))
                             {
-                                <li class="nav-item" style="float: right"><a class="nav-link" href="@Url.Action("Index", "BlogPosts")">Blog Portal</a></li>
-                            }
+                                <li class="nav-item" style="float: right">@Html.ActionLink("Admin Portal", "BlogPosts", null, new { @class = "nav-link"})</li>
+                                <li class="nav-item" style="float: right"><a class="nav-link" href="@Url.Action("Index", "BlogPosts")">Admin Portal</a></li>
+                                }
 
-                        </ul>
+                            </ul>
                         <ul class="nav navbar-nav navbar-right navbar-social">
                             <li><a href="#"><i class="ti-facebook"></i></a></li>
                             <li><a href="#"><i class="ti-twitter-alt"></i></a></li>
@@ -171,5 +172,7 @@
     <script src="~/Scripts/mail-script.js"></script>
     <script src="~/Scripts/main.js"></script>
     @RenderSection("scripts", required: false)
+    
+
 </body>
 </html>
