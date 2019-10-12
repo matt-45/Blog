@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Blog.Models;
+using Microsoft.AspNet.Identity;
 
 namespace Blog.Controllers
 {
@@ -49,10 +51,14 @@ namespace Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,BlogPostId,AuthorId,CommentBody,Created,Updated,UpdateReason")] Comment comment)
+        public ActionResult Create(Comment comment, string commentBody)
         {
             if (ModelState.IsValid)
             {
+                comment.Created = DateTime.Now;
+                comment.CommentBody = commentBody;
+                comment.AuthorId = User.Identity.GetUserId();
+                comment.Author = db.Users.FirstOrDefault(u => u.Id == comment.AuthorId);
                 db.Comments.Add(comment);
                 db.SaveChanges();
                 return RedirectToAction("Index");
