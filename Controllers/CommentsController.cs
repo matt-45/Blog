@@ -17,6 +17,7 @@ namespace Blog.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             var comments = db.Comments.Include(c => c.Author).Include(c => c.BlogPost);
@@ -39,11 +40,20 @@ namespace Blog.Controllers
         }
 
         // GET: Comments/Create
+        [Authorize]
         public ActionResult Create()
         {
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName");
-            ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title");
-            return View();
+            if (User.Identity.IsAuthenticated)
+            {
+                ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName");
+                ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title");
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
         }
 
         // POST: Comments/Create
@@ -55,13 +65,14 @@ namespace Blog.Controllers
         {
             if (ModelState.IsValid)
             {
+                var parrentPost = db.BlogPosts.FirstOrDefault(p => p.Id == comment.BlogPostId);
                 comment.Created = DateTime.Now;
                 comment.CommentBody = commentBody;
                 comment.AuthorId = User.Identity.GetUserId();
                 comment.Author = db.Users.FirstOrDefault(u => u.Id == comment.AuthorId);
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "BlogPosts", new { slug = parrentPost.Slug });
             }
 
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
@@ -70,6 +81,7 @@ namespace Blog.Controllers
         }
 
         // GET: Comments/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -105,6 +117,7 @@ namespace Blog.Controllers
         }
 
         // GET: Comments/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

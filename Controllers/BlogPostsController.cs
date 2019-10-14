@@ -16,6 +16,7 @@ namespace Blog.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BlogPosts
+        [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
             return View(db.BlogPosts.ToList());
@@ -82,6 +83,7 @@ namespace Blog.Controllers
         }
 
         // GET: BlogPosts/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(string slug)
         {
             if (slug == null)
@@ -105,7 +107,16 @@ namespace Blog.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 var post = db.BlogPosts.First(a => a.Id == blogPost.Id);
+                var Slug = StringUtilites.URLFriendly(blogPost.Title);
+                if (String.IsNullOrWhiteSpace(Slug))
+                {
+                    ModelState.AddModelError("Title", "Invalid title");
+                    return View(blogPost);
+                }
+
+                post.Slug = Slug;
                 post.Title = blogPost.Title;
                 post.Abstract = blogPost.Abstract;
                 post.Updated = DateTime.Now;
@@ -119,6 +130,7 @@ namespace Blog.Controllers
         }
 
         // GET: BlogPosts/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
