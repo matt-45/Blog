@@ -47,7 +47,7 @@
                     <h4>@Model.Comments.Count Comments</h4>
 
                     <div class="comment-list">
-                        @foreach (var comment in Model.Comments)
+                        @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
                         {
                             if (comment.Author != null)
                             {
