@@ -30,7 +30,7 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8">
-                        @foreach (var blogPost in Model.Take(3))
+                        @foreach (var blogPost in Model.Take(3).OrderByDescending(p => p.Created))
                         {
                             <div class="single-recent-blog-post">
                                 <div class="thumb">

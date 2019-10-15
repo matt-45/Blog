@@ -27,7 +27,7 @@
                 <div class="row">
                     <div class="col-lg-8">
                         <div class="row">
-                            @foreach (var blogPost in Model)
+                            @foreach (var blogPost in Model.OrderByDescending(p => p.Created))
                             {
                                 <div class="col-md-6">
                                     <div class="single-recent-blog-post card-view">
