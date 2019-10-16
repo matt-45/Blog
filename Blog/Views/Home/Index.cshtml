@@ -1,16 +1,21 @@
 ﻿@using Blog.Models
-@model IEnumerable<BlogPost>
+@using PagedList
+@using PagedList.Mvc
+@model IPagedList<BlogPost>
 
 @{
     ViewBag.Title = "Home Page";
 
 }
+
+    <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css">
     <style>
         .active-home {
             color: orange !important;
         }
     </style>
     <main class="site-main">
+        
         <!--================Hero Banner start =================-->
         <section class="mb-30px">
             <div class="container">
@@ -24,13 +29,12 @@
             </div>
         </section>
         <!--================Hero Banner end =================-->
-
         <!--================ Start Blog Post Area =================-->
         <section class="blog-post-area section-margin mt-4">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8">
-                        @foreach (var blogPost in Model.Take(3).OrderByDescending(p => p.Created))
+                        @foreach (var blogPost in Model)
                         {
                             <div class="single-recent-blog-post">
                                 <div class="thumb">
@@ -70,79 +74,85 @@
                             <div class="col-lg-12">
                                 <nav class="blog-pagination justify-content-center d-flex">
                                     <ul class="pagination">
-                                        <li>
-                                            @if (Model.Count() <= 0)
-                                            {
-                                                <h2>Nothing Here</h2>
-                                            }
-                                            else
-                                            {
-                                                @Html.ActionLink("View All", "Archive", "BlogPosts", null, new { @class = "button" })
-                                            }
-
-                                        </li> 
+                                        @*<li class="page-item">
+                                            <a href="#" class="page-link" aria-label="Previous">
+                                                <span aria-hidden="true">
+                                                    <i class="ti-angle-left"></i>
+                                                </span>
+                                            </a>
+                                        </li>*@
+                                        @Html.PagedListPager(Model, page => Url.Action("Index", new { page = page }))
+                                        @*<li class="page-item active"><a href="#" class="page-link"></a></li>
+                                        <li class="page-item"><a href="#" class="page-link">2</a></li>
+                                        <li class="page-item">
+                                            <a href="#" class="page-link" aria-label="Next">
+                                                <span aria-hidden="true">
+                                                    <i class="ti-angle-right"></i>
+                                                </span>
+                                            </a>
+                                        </li>*@
                                     </ul>
                                 </nav>
                             </div>
                         </div>
                     </div>
 
-                        <!-- Start Blog Post Siddebar -->
-                        <div class="col-lg-4 sidebar-widgets">
-                            <div class="widget-wrap">
-                                <div class="single-sidebar-widget newsletter-widget">
-                                    <h4 class="single-sidebar-widget__title">Newsletter</h4>
-                                    <div class="form-group mt-30">
-                                        <div class="col-autos">
-                                            <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Enter email" onfocus="this.placeholder = ''"
-                                                   onblur="this.placeholder = 'Enter email'">
-                                        </div>
+                    <!-- Start Blog Post Siddebar -->
+                    <div class="col-lg-4 sidebar-widgets">
+                        <div class="widget-wrap">
+                            <div class="single-sidebar-widget newsletter-widget">
+                                <h4 class="single-sidebar-widget__title">Newsletter</h4>
+                                <div class="form-group mt-30">
+                                    <div class="col-autos">
+                                        <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Enter email" onfocus="this.placeholder = ''"
+                                               onblur="this.placeholder = 'Enter email'">
                                     </div>
-                                    <button class="bbtns d-block mt-20 w-100">Subcribe</button>
                                 </div>
-
-
-                                <div class="single-sidebar-widget post-category-widget">
-                                    <h4 class="single-sidebar-widget__title">Catgory</h4>
-                                    <ul class="cat-list mt-20">
-                                        <li>
-                                            <a href="#" class="d-flex justify-content-between">
-                                                <p>Technology</p>
-                                                <p>(03)</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex justify-content-between">
-                                                <p>Software</p>
-                                                <p>(09)</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex justify-content-between">
-                                                <p>Lifestyle</p>
-                                                <p>(12)</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex justify-content-between">
-                                                <p>Shopping</p>
-                                                <p>(02)</p>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="d-flex justify-content-between">
-                                                <p>Food</p>
-                                                <p>(10)</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-
+                                <button class="bbtns d-block mt-20 w-100">Subcribe</button>
                             </div>
-                        </div>
 
-                <!-- End Blog Post Siddebar -->
-            </div>
+
+                            <div class="single-sidebar-widget post-category-widget">
+                                <h4 class="single-sidebar-widget__title">Catgory</h4>
+                                <ul class="cat-list mt-20">
+                                    <li>
+                                        <a href="#" class="d-flex justify-content-between">
+                                            <p>Technology</p>
+                                            <p>(03)</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="d-flex justify-content-between">
+                                            <p>Software</p>
+                                            <p>(09)</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="d-flex justify-content-between">
+                                            <p>Lifestyle</p>
+                                            <p>(12)</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="d-flex justify-content-between">
+                                            <p>Shopping</p>
+                                            <p>(02)</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="d-flex justify-content-between">
+                                            <p>Food</p>
+                                            <p>(10)</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- End Blog Post Siddebar -->
+                </div>
         </section>
         <!--================ End Blog Post Area =================-->
     </main>

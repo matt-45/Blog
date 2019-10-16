@@ -9,7 +9,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Blog.Models;
+using Blog.Helpers;
 using static Blog.PersonalEmail;
+using System.Net.Mail;
 
 namespace Blog.Controllers
 {
@@ -211,10 +213,21 @@ namespace Blog.Controllers
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
+
                 string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                //await UserManager.SendEmailAsync(user.Id, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+                var body = "<p>{0}</p><p>{1}</p>";
+                var mailMessage = new MailMessage();
+                mailMessage.To.Add(new MailAddress(user.Email));
+                mailMessage.From = new MailAddress("mattpark102@outlook.com");
+                mailMessage.Subject = "Message from blog post user.";
+                mailMessage.Body = string.Format(body, "Reset Password", "Please reset your password by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                mailMessage.IsBodyHtml = true;
+                SendEmail.Send(mailMessage);
                 return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                
             }
 
             // If we got this far, something failed, redisplay form
