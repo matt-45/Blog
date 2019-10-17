@@ -11,4 +11,5 @@ namespace Blog
             ConfigureAuth(app);
         }
     }
+    
 }

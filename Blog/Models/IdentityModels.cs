@@ -13,6 +13,7 @@ namespace Blog.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DisplayName { get; set; }
+        public string AvatarPath { get; set; }
 
         // Navigation Section
         public virtual ICollection<Comment> Comments { get; set; }

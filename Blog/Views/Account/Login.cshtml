@@ -2,7 +2,6 @@
 @model LoginViewModel
 
 <h2>@ViewBag.Title.</h2>
-<meta name="google-signin-client_id" content="8814891115-nslosrudavqoagefbov6fb50iq748hl4.apps.googleusercontent.com">
 <div class="row">
     <div class="col-md-8">
         <section id="loginForm">
@@ -12,21 +11,21 @@
                 <h4 style="text-align: center">Use a local account to log in.</h4>
                 <hr />
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group" style="padding-left: 75px">
+                <div class="form-group">
                     @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
                         @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="form-group" style="padding-left: 75px">
+                <div class="form-group">
                     @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
                     <div class="col-md-10">
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                     </div>
                 </div>
-                <div class="form-group" style="padding-left: 75px">
+                <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <div class="checkbox">
                             @Html.CheckBoxFor(m => m.RememberMe)
@@ -34,18 +33,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group" style="padding-left: 75px">
+                <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="submit" value="Log in" class="button" />
                         @Html.ActionLink("Register", "Register", null, new { @type = "submit", @value = "Register", @class = "button" })
                     </div>
                 </div>
-                <div class="form-group" style="padding-left: 75px">
+                <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
 
                     </div>
                 </div>
-                <div class="form-group" style="padding-left: 75px">
+                <div class="form-group" >
                     <div class="col-md-offset-2 col-md-10">
                         @Html.ActionLink("Forgot your password?", "ForgotPassword", null, new { @type = "submit", @value = "Register", @class = "button pull-right" })
                     </div>
@@ -58,18 +57,18 @@
     <div class="col-md-4">
         <section id="socialLoginForm">
             @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            @*<div class="g-signin2" data-onsuccess="onSignIn"></div>*@
         </section>
     </div>
 </div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    @*<script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         gapi.load("auth2", function () {
             gapi.auth2.init();
         });
-    </script>
+    </script>*@
 }

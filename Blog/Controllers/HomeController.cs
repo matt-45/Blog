@@ -19,6 +19,7 @@ using PagedList.Mvc;
 
 namespace Blog.Controllers // all controllers are inside this namespace
 {
+    [RequireHttps]
     public class HomeController : Controller { 
 /*var data = new dataVM()
             {
@@ -49,7 +50,7 @@ namespace Blog.Controllers // all controllers are inside this namespace
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Contact(EmailFormModel model)
+        public ActionResult Contact(EmailFormModel model)
         {
             if (ModelState.IsValid)
             {

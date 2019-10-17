@@ -7,6 +7,8 @@ using Microsoft.Owin.Security.Google;
 using Owin;
 using Blog.Models;
 using static Blog.PersonalEmail;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Blog
 {
@@ -60,11 +62,22 @@ namespace Blog
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "8814891115-nslosrudavqoagefbov6fb50iq748hl4.apps.googleusercontent.com",
+                ClientSecret = "ls2lv_r4YWwxZEIDXZ4y4hp0",
+                Provider = new GoogleOAuth2AuthenticationProvider()
+                {
+                    OnAuthenticated = (context) =>
+                    {
+                        context.Identity.AddClaim(new Claim("urn:google:name", context.Identity.FindFirstValue(ClaimTypes.Name)));
+                        context.Identity.AddClaim(new Claim("urn:google:email", context.Identity.FindFirstValue(ClaimTypes.Email)));
+                        context.Identity.AddClaim(new System.Security.Claims.Claim("urn:google:accesstoken", context.AccessToken, ClaimValueTypes.String, "Google"));
+
+                        return Task.FromResult(0);
+                    }
+                }
+            });
         }
     }
 }
