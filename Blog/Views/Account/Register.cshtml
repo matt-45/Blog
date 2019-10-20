@@ -37,21 +37,27 @@
             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
         </div>
     </div>
-    <div class="form-group" >
+    <div class="form-group">
         @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
     </div>
-    <div class="form-group" >
+    <div class="form-group">
         @Html.Label("Upload Image (optional)", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             <input name="image" type="file" class="form-control" id="fileUpload" />
         </div>
     </div>
+    <div class="form-group">
+        @Html.Label("About You", null, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBox("aboutYou", null, new { @class = "form-control" })
+        </div>
+    </div>
 
-    
-    <div class="form-group" >
+
+    <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn btn-default" value="Register" />
         </div>

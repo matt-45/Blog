@@ -41,9 +41,12 @@
         </div>
     </div>
 
-
-    <input name="image" type="file" class="form-control" id="fileUpload"/>
-
+    <div class="form-group">
+        @Html.Label("Upload Image", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <input name="image" type="file" class="form-control" id="fileUpload" />
+        </div>
+    </div>
 
     <div class="form-group">
         @Html.LabelFor(model => model.Published, htmlAttributes: new { @class = "control-label col-md-2" })

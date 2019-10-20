@@ -27,12 +27,13 @@ namespace Blog.Controllers // all controllers are inside this namespace
             }*/
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string searchStr)
         {
-            int pageSize = 3;
+            ViewBag.Search = searchStr;
+            var blogList = IndexSearch(searchStr);
+            int pageSize = 3; // the number of posts you want to display per page
             int pageNumber = (page ?? 1);
-            var blogPosts = db.BlogPosts.Where(p => p.Published).AsQueryable();
-            return View(blogPosts.OrderByDescending(p => p.Created).ToPagedList(pageNumber, pageSize));
+            return View(blogList.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult About()
@@ -66,6 +67,27 @@ namespace Blog.Controllers // all controllers are inside this namespace
                 return View(model);
             }
             return View(model);
+        }
+
+        public IQueryable<BlogPost> IndexSearch(string searchStr)
+        {
+            IQueryable<BlogPost> result = null;
+            if (searchStr != null)
+            {
+                result = db.BlogPosts.AsQueryable();
+                result = result.Where(p => p.Title.Contains(searchStr) ||
+                p.BlogPostBody.Contains(searchStr) ||
+                p.Comments.Any(c => c.CommentBody.Contains(searchStr) ||
+                c.Author.FirstName.Contains(searchStr) ||
+                c.Author.LastName.Contains(searchStr) ||
+                c.Author.DisplayName.Contains(searchStr) ||
+                c.Author.Email.Contains(searchStr)));
+            }
+            else
+            {
+                result = db.BlogPosts.AsQueryable();
+            }
+            return result.OrderByDescending(p => p.Created);
         }
 
     }

@@ -4,13 +4,6 @@
 
 @{
     ViewBag.Title = "Details";
-    var avatarPath = "";
-    if (User.Identity.IsAuthenticated)
-    {
-        ApplicationDbContext db = new ApplicationDbContext();
-        var userId = User.Identity.GetUserId();
-        avatarPath = db.Users.Find(userId).AvatarPath;
-    }
 }
 
 <section class="blog-post-area section-margin">
@@ -28,32 +21,32 @@
                     }
                     <a href="#"><h4>@Model.Title<br /> <!--subtitle--></h4></a>
                     <div class="user_details">
-                        <div class="float-left">
+                        @*<div class="float-left">
                             <a href="#">Lifestyle</a>
                             <a href="#">Gadget</a>
-                        </div>
+                        </div>*@
                         <div class="float-right mt-sm-0 mt-3">
                             <div class="media">
                                 <div class="media-body">
-                                    <h5>Matthew Park</h5>
+                                    <h5>@Model.Author.FirstName @Model.Author.LastName</h5>
                                     <p>@Model.Created</p>
                                 </div>
                                 <div class="d-flex">
-                                    <img width="42" height="42" src=@avatarPath alt="">
+                                    <img width="42" height="42" src=@Model.Author.AvatarPath alt="">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <p>@Html.Raw(Model.BlogPostBody)</p>
                     <div class="news_d_footer flex-column flex-sm-row">
-                        <a href="#"><span class="align-middle mr-2"><i class="ti-heart"></i></span>Lily and 4 people like this</a>
-                        <a class="justify-content-sm-center ml-sm-auto mt-sm-0 mt-2" href="#"><span class="align-middle mr-2"><i class="ti-themify-favicon"></i></span>06 Comments</a>
-                        <div class="news_socail ml-sm-auto mt-sm-0 mt-2">
+                        <a href="#"><span class="align-middle mr-2"><i class="ti-heart"></i></span>4 people like this</a>
+                        <a class="justify-content-sm-center ml-sm-auto mt-sm-0 mt-2" href="#"><span class="align-middle mr-2"><i class="ti-themify-favicon"></i></span>@Model.Comments.Count Comments</a>
+                        @*<div class="news_socail ml-sm-auto mt-sm-0 mt-2">
                             <a href="#"><i class="fab fa-facebook-f"></i></a>
                             <a href="#"><i class="fab fa-twitter"></i></a>
                             <a href="#"><i class="fab fa-dribbble"></i></a>
                             <a href="#"><i class="fab fa-behance"></i></a>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
 
@@ -62,29 +55,38 @@
                     <h4>@Model.Comments.Count Comments</h4>
 
                     <div class="comment-list">
-                        @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
+                    @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
+                    {
+                        if (comment.Author != null)
                         {
-                            if (comment.Author != null)
-                            {
-                                <div class="single-comment justify-content-between d-flex">
-                                    <div class="user justify-content-between d-flex">
-                                        <div class="thumb">
-                                            <img src="img/blog/c1.jpg" alt="">
-                                        </div>
-                                        <div class="desc">
-                                            <h5><a href="#">@comment.Author.DisplayName</a></h5>
-                                            <p class="date">@comment.Created.ToString("MM/dd/yyyy hh:mm tt")</p>
-                                            <p class="comment">
-                                                @comment.CommentBody
-                                            </p>
-                                        </div>
-                                    </div>
-                                    @*<div class="reply-btn">
-                                            <a href="" class="btn-reply text-uppercase">reply</a>
-                                        </div>*@
+                        <div class="single-comment justify-content-between d-flex">
+                            <div class="user justify-content-between d-flex">
+                                <div class="thumb">
+                                    <img src="img/blog/c1.jpg" alt="">
                                 </div>
+                                <div class="desc">
+                                    <h5><a href="@Url.Action("Index", "Account", new { Id = comment.AuthorId})">@comment.Author.DisplayName</a></h5>
+                                    <p class="date">@comment.Created.ToString("MM/dd/yyyy hh:mm tt")</p>
+                                    <p class="comment">
+                                        @comment.CommentBody
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            @if (comment.AuthorId == User.Identity.GetUserId() || User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                            {
+                            <div class="reply-btn">
+                                <a href="@Url.Action("Edit", "Comments", new { Id = comment.Id})" class="btn-reply text-uppercase">Edit</a>
+                                <a href="@Url.Action("Delete", "Comments", new { Id = comment.Id})" class="btn-reply text-uppercase">Delete</a>
+                            </div>
+                                    @*<a class=" fa-pull-right" href="@Url.Action("Edit", "Comments", new { Id = comment.Id})">Edit Comment <i></i></a>*@
                             }
+
+                        </div>
                         }
+                    }
 
                     </div>
                 </div>
@@ -105,7 +107,7 @@
                         @Html.Hidden("BlogPostId", Model.Id)
                         if (User.Identity.IsAuthenticated)
                         {
-                            <div class="form-group">
+                            <div class="form-group-reply">
                                 @Html.TextArea("commentBody", new
                                     {
                                        @class = "form-control mb-10",

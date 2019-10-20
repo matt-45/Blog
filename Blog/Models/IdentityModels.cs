@@ -14,12 +14,16 @@ namespace Blog.Models
         public string LastName { get; set; }
         public string DisplayName { get; set; }
         public string AvatarPath { get; set; }
+        public string AboutYou { get; set; }
+
 
         // Navigation Section
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<BlogPost> BlogPosts { get; set; }
 
         public ApplicationUser()
         {
+            this.BlogPosts = new HashSet<BlogPost>();
             this.Comments = new HashSet<Comment>();
         }
 

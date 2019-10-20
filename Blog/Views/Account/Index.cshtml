@@ -1,0 +1,196 @@
+﻿@using Blog.Models
+@using Microsoft.AspNet.Identity
+@model ApplicationUser
+@{
+/*ApplicationDbContext db = new ApplicationDbContext();
+var userId = Model.Where(u => u.Id == );
+var user = db.Users.Find(userId);*/
+}
+<div class="row">
+    <div class="col-12">
+        <img src=@Model.AvatarPath class="rounded-circle center" style="width: 10%; " />
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <h1 style="text-align: center">@Model.DisplayName</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <h2 style="text-align: center">@Model.FirstName @Model.LastName</h2>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <h3 style="text-align: center">@Model.Email</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <h5 style="text-align: center; padding-left:20%;padding-right:20%">@Model.AboutYou</h5>
+    </div>
+</div>
+
+<div class="row">
+    @if (Model.Id == User.Identity.GetUserId() || User.IsInRole("Admin") || User.IsInRole("Moderator"))
+    {
+        <div class="col-12" style="display: flex; align-items: center; justify-content: center">
+            <button class="button" data-toggle="modal" data-target="#editModal">Edit Account</button>
+        </div>
+    }
+</div>
+
+<div class="row" style="padding-top:5%">
+    <div class="col-12">
+        <h1 style="text-align: center">Blog Posts</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-2"></div>
+    <div class="col-lg-8">
+        <div class="row">
+            @foreach (var blogPost in Model.BlogPosts)
+            {
+                if (blogPost.Published)
+                {
+                    <div class="col-md-4" style="padding-top:1%">
+                        <div class="single-recent-blog-post card-view">
+                            <div class="thumb">
+                                <img class="card-img rounded-0" src="~/Images/Thumb/thumb-card1.png" alt="">
+                                <ul class="thumb-info">
+                                    <li><a href="#"><i class="ti-user"></i>Matt</a></li>
+                                    <li><a href="#"><i class="ti-notepad"></i>@blogPost.Created.ToString("MM/dd/yyy")</a></li>
+                                    <li><a href="#"><i class="ti-themify-favicon"></i>@blogPost.Comments.Count</a></li>
+                                </ul>
+                            </div>
+                            <div class="details mt-20">
+                                <a href="blog-single.html">
+                                    <h3>
+                                        @blogPost.Title
+                                    </h3>
+                                </a>
+                                <p>@blogPost.Abstract</p>
+
+                                @Html.ActionLink("Read More", "Details", "BlogPosts", new { slug = blogPost.Slug }, new { @class = "button" })
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="col-lg-2"></div>
+</div>
+<div class="row" style="padding-top:5%">
+    <div class="col-12">
+        <h1 style="text-align: center">Comments</h1>
+    </div>
+</div>
+
+@foreach (var comment in Model.Comments)
+{
+    <div class="row" style="padding-top:2%">
+        <div class="col-3"></div>
+        <div class="col-3">
+            <h5 style="font-weight: bold">Blog Post: @comment.BlogPost.Title</h5>
+        </div>
+        <div class="col-3">
+            <h5 class="fa-pull-right" style="font-weight: bold">Created: @comment.Created.ToString("MM/dd/yyyy hh:mm tt")</h5>
+        </div>
+        <div class="col-3"></div>
+    </div>
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-6" style="padding-top:1%">
+            <h6>@comment.CommentBody</h6>
+        </div>
+        <div class="col-2"></div>
+    </div>
+    <div class="row">
+        <div class="col-9">
+            <a href="@Url.Action("Edit", "Comments", new { Id = comment.Id })" class="btn-reply-custom text-uppercase fa-pull-right">Edit</a>
+            <a href="@Url.Action("Delete", "Comments", new { Id = comment.Id })" class="btn-reply-custom text-uppercase fa-pull-right">Delete</a>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+}
+
+<!-- The Modal -->
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title" style="margin: 0 auto">Edit Your Account</h4>
+            </div>
+
+            @using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("userId", Model.Id)
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 class="fa-pull-right">Avatar</h5>
+                        </div>
+                        <div class="col-4">
+                            <input name="image" type="file" class="form-control" id="fileUpload" />
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 class="fa-pull-right">Display Name</h5>
+                        </div>
+                        <div class="col-4">
+                            @Html.TextBox("displayName", null, new { @class = "form-control" })
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 class="fa-pull-right">First Name</h5>
+                        </div>
+                        <div class="col-4">
+                            @Html.TextBox("firstName", null, new { @class = "form-control" })
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 class="fa-pull-right">Last Name</h5>
+                        </div>
+                        <div class="col-4">
+                            @Html.TextBox("lastName", null, new { @class = "form-control" })
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row" style="padding-top: 2%">
+                        <div class="col-12" style="display: flex; align-items: center; justify-content: center">
+                            <h5>About You</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" style="display: flex; align-items: center; justify-content: center">
+                            @Html.TextArea("aboutYou", new { @style = "width: 90%; height: 100px" })
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="button pull-left" data-dismiss="modal">Exit</button>
+                    <button type="submit" class="button">Save</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/EditAccountModal.js"></script>

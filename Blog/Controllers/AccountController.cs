@@ -61,6 +61,23 @@ namespace Blog.Controllers
             }
         }
 
+        /*[Authorize]
+        public ActionResult */
+
+
+        [Authorize]
+        public ActionResult Index(string Id)
+        {
+            if (!String.IsNullOrEmpty(Id))
+            {
+                var user = db.Users.FirstOrDefault(u => u.Id == Id);
+                return View(user);
+            }
+            return View();
+            
+        }
+
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -156,7 +173,7 @@ namespace Blog.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model, string firstName, string lastName, string displayName, HttpPostedFileBase avatar)
+        public async Task<ActionResult> Register(RegisterViewModel model, string firstName, string lastName, string displayName, HttpPostedFileBase avatar, string aboutYou)
         {
             if (ModelState.IsValid)
             {
@@ -166,7 +183,8 @@ namespace Blog.Controllers
                     Email = model.Email,
                     FirstName = firstName,
                     LastName = lastName,
-                    DisplayName = displayName
+                    DisplayName = displayName,
+                    AboutYou = aboutYou
                 };
                 if (ImageUploadValidator.IsWebFriendlyImage(avatar))
                 {
@@ -192,6 +210,31 @@ namespace Blog.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(string userId, string firstName, string lastName, string displayName, HttpPostedFileBase avatar, string aboutYou)
+        {
+            var user = UserManager.FindById(userId);
+            if (ModelState.IsValid)
+            {
+                user.FirstName = firstName;
+                user.LastName = lastName;
+                user.DisplayName = displayName;
+                user.AboutYou = aboutYou;
+            }
+            if (ImageUploadValidator.IsWebFriendlyImage(avatar))
+            {
+                var fileName = $"{DateTime.Now.Ticks}_{Path.GetFileName(avatar.FileName)}";
+                avatar.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                user.AvatarPath = "/Uploads/" + fileName;
+            }
+            UserManager.Update(user);
+
+            // If we got this far, something failed, redisplay form
+            return RedirectToAction("Index", "Account", new { Id = user.Id });
         }
 
         //

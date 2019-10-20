@@ -70,6 +70,7 @@ namespace Blog.Controllers
                 comment.CommentBody = commentBody;
                 comment.AuthorId = User.Identity.GetUserId();
                 comment.Author = db.Users.FirstOrDefault(u => u.Id == comment.AuthorId);
+                comment.BlogPostId = parrentPost.Id;
                 db.Comments.Add(comment);
                 db.SaveChanges();
                 return RedirectToAction("Details", "BlogPosts", new { slug = parrentPost.Slug });
@@ -103,14 +104,28 @@ namespace Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,BlogPostId,AuthorId,CommentBody,Created,Updated,UpdateReason")] Comment comment)
+        public ActionResult Edit([Bind(Include = "Id,BlogPostId,AuthorId,CommentBody")] Comment comment)
         {
+            
+
             if (ModelState.IsValid)
             {
-                db.Entry(comment).State = EntityState.Modified;
+                var com = db.Comments.First(c => c.Id == comment.Id);
+                var parrentPost = db.BlogPosts.First(p => p.Id == comment.BlogPostId);
+
+                if (String.IsNullOrWhiteSpace(comment.CommentBody))
+                {
+                    ModelState.AddModelError("CommentBody", "Invalid title");
+                    return View(comment);
+                }
+
+                com.Created = comment.Created;
+                com.Updated = DateTime.Now;
+                com.CommentBody = comment.CommentBody;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Details", "BlogPosts", new { slug = parrentPost.Slug});
             }
+
             ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
             ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title", comment.BlogPostId);
             return View(comment);
@@ -135,12 +150,13 @@ namespace Blog.Controllers
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id, int parrentId)
         {
+            var parrentPost = db.BlogPosts.First(p => p.Id == parrentId);
             Comment comment = db.Comments.Find(id);
             db.Comments.Remove(comment);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", "BlogPosts", new { slug = parrentPost.Slug });
         }
 
         protected override void Dispose(bool disposing)

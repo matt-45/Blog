@@ -9,6 +9,8 @@ using System.Web;
 using System.Web.Mvc;
 using Blog.Helpers;
 using Blog.Models;
+using Microsoft.AspNet.Identity;
+using PagedList;
 
 namespace Blog.Controllers
 {
@@ -23,11 +25,13 @@ namespace Blog.Controllers
             return View(db.BlogPosts.ToList());
         }
 
-        public ActionResult Archive()
+        public ActionResult Archive(int? page, string searchStr)
         {
-            var blogPosts = db.BlogPosts.Where(b => b.Published).ToList();
-
-            return View(blogPosts);
+            ViewBag.Search = searchStr;
+            var blogList = IndexSearch(searchStr);
+            int pageSize = 3; // the number of posts you want to display per page
+            int pageNumber = (page ?? 1);
+            return View(blogList.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: BlogPosts/Details/5
@@ -79,7 +83,8 @@ namespace Blog.Controllers
                     image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
                     blogPost.MediaURL = "/Uploads/" + fileName;
                 }
-
+                blogPost.AuthorId = User.Identity.GetUserId();
+                blogPost.Author = db.Users.FirstOrDefault(u => u.Id == blogPost.AuthorId);
                 blogPost.Slug = Slug;
                 blogPost.Created = DateTime.Now;
                 db.BlogPosts.Add(blogPost);
@@ -130,6 +135,8 @@ namespace Blog.Controllers
                 post.Updated = DateTime.Now;
                 post.BlogPostBody = blogPost.BlogPostBody;
                 post.Comments = blogPost.Comments;
+                post.AuthorId = blogPost.AuthorId;
+                post.Author = blogPost.Author;
 
                 db.SaveChanges();
                 return RedirectToAction("");
@@ -171,6 +178,27 @@ namespace Blog.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public IQueryable<BlogPost> IndexSearch(string searchStr)
+        {
+            IQueryable<BlogPost> result = null;
+            if (searchStr != null)
+            {
+                result = db.BlogPosts.AsQueryable();
+                result = result.Where(p => p.Title.Contains(searchStr) ||
+                p.BlogPostBody.Contains(searchStr) ||
+                p.Comments.Any(c => c.CommentBody.Contains(searchStr) ||
+                c.Author.FirstName.Contains(searchStr) ||
+                c.Author.LastName.Contains(searchStr) ||
+                c.Author.DisplayName.Contains(searchStr) ||
+                c.Author.Email.Contains(searchStr)));
+            }
+            else
+            {
+                result = db.BlogPosts.AsQueryable();
+            }
+            return result.OrderByDescending(p => p.Created);
         }
     }
 }

@@ -1,0 +1,23 @@
+﻿body {
+}
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.btn-reply-custom {
+    background-color: rgba(130,139,178,0.1);
+    color: #3a414e;
+    border: 1px solid #eee;
+    padding: 0px 18px;
+    font-size: 13px;
+    display: block;
+    line-height: 28px;
+    border-radius: 0px;
+    -webkit-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s
+}
