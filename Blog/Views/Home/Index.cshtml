@@ -42,7 +42,7 @@
                                     <div class="thumb">
                                         <img class="img-fluid" src=@blogPost.MediaURL alt="">
                                         <ul class="thumb-info">
-                                            <li><a href="#"><i class="ti-user"></i>Matt</a></li>
+                                            <li><a href="@Url.Action("Index", "Account", new { Id = blogPost.AuthorId })"><i class="ti-user"></i>Matt</a></li>
                                             <li><a href="#"><i class="ti-notepad"></i>@blogPost.Created.ToString("MM/dd/yyy")</a></li>
                                             <li><a href="#"><i class="ti-themify-favicon"></i>Comments @blogPost.Comments.Count</a></li>
                                         </ul>
@@ -53,7 +53,7 @@
                                                 @blogPost.Title
                                             </h3>
                                         </a>
-                                        <p class="tag-list-inline">Tag: <a href="">These</a>, <a href="">Tags</a>, <a href="">Dont</a>, <a href="">Exist</a></p>
+                                        @*<p class="tag-list-inline">Tag: <a href="">These</a>, <a href="">Tags</a>, <a href="">Dont</a>, <a href="">Exist</a></p>*@
                                         <p>@Html.Raw(blogPost.Abstract)</p>
                                         <a class="button" href="@Url.Action("Details", "BlogPosts", new { slug = blogPost.Slug})">Read More <i class="ti-arrow-right"></i></a>
 

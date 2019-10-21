@@ -84,7 +84,6 @@ namespace Blog.Controllers
                     blogPost.MediaURL = "/Uploads/" + fileName;
                 }
                 blogPost.AuthorId = User.Identity.GetUserId();
-                blogPost.Author = db.Users.FirstOrDefault(u => u.Id == blogPost.AuthorId);
                 blogPost.Slug = Slug;
                 blogPost.Created = DateTime.Now;
                 db.BlogPosts.Add(blogPost);
@@ -135,7 +134,6 @@ namespace Blog.Controllers
                 post.Updated = DateTime.Now;
                 post.BlogPostBody = blogPost.BlogPostBody;
                 post.Comments = blogPost.Comments;
-                post.AuthorId = blogPost.AuthorId;
                 post.Author = blogPost.Author;
 
                 db.SaveChanges();

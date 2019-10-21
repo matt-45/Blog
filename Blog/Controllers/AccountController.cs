@@ -14,6 +14,7 @@ using static Blog.PersonalEmail;
 using System.Net.Mail;
 using System.IO;
 using Microsoft.Owin.Security.Google;
+using System.Data.Entity;
 
 namespace Blog.Controllers
 {
@@ -63,9 +64,7 @@ namespace Blog.Controllers
 
         /*[Authorize]
         public ActionResult */
-
-
-        [Authorize]
+        [AllowAnonymous]
         public ActionResult Index(string Id)
         {
             if (!String.IsNullOrEmpty(Id))
@@ -74,7 +73,6 @@ namespace Blog.Controllers
                 return View(user);
             }
             return View();
-            
         }
 
 
@@ -235,6 +233,29 @@ namespace Blog.Controllers
 
             // If we got this far, something failed, redisplay form
             return RedirectToAction("Index", "Account", new { Id = user.Id });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public virtual ActionResult EditRole(ApplicationUser user, string role)
+        {
+            if (ModelState.IsValid)
+            {
+                // THIS LINE IS IMPORTANT
+                var oldUser = UserManager.FindById(user.Id);
+                var oldRoleId = oldUser.Roles.SingleOrDefault().RoleId;
+                var oldRoleName = db.Roles.SingleOrDefault(r => r.Id == oldRoleId).Name;
+
+                if (oldRoleName != role)
+                {
+                    UserManager.RemoveFromRole(user.Id, oldRoleName);
+                    UserManager.AddToRole(user.Id, role);
+                }
+                db.Entry(user).State = EntityState.Modified;
+
+                return RedirectToAction("Index", "Account", new { Id = user.Id});
+            }
+            return View(user);
         }
 
         //
