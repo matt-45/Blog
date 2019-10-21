@@ -25,8 +25,6 @@ namespace Blog.Controllers
         private ApplicationUserManager _userManager;
 
         private ApplicationDbContext db = new ApplicationDbContext();
-        
-
 
         public AccountController()
         {

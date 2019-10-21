@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Web.Mvc;
 using System.Threading.Tasks;
+using System.Web.Configuration;
 
 namespace Blog.Helpers
 {
@@ -21,8 +22,8 @@ namespace Blog.Helpers
                 smtp.UseDefaultCredentials = false;
                 var credential = new NetworkCredential
                 {
-                    UserName = "mattpark102@outlook.com",
-                    Password = "vdbRyPd#F5$8"
+                    UserName = WebConfigurationManager.AppSettings["username"],
+                    Password = WebConfigurationManager.AppSettings["password"]
                 };
                 smtp.Credentials = credential;
                 smtp.Host = "smtp-mail.outlook.com";

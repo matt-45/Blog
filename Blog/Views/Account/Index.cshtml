@@ -1,11 +1,7 @@
 ﻿@using Blog.Models
 @using Microsoft.AspNet.Identity
 @model ApplicationUser
-@{
-/*ApplicationDbContext db = new ApplicationDbContext();
-var userId = Model.Where(u => u.Id == );
-var user = db.Users.Find(userId);*/
-}
+
 <div class="row">
     <div class="col-12">
         <img src=@Model.AvatarPath class="rounded-circle center" style="width: 10%; " />
@@ -41,11 +37,15 @@ var user = db.Users.Find(userId);*/
     }
 </div>
 
-<div class="row" style="padding-top:5%">
-    <div class="col-12">
-        <h1 style="text-align: center">Blog Posts</h1>
+@if (Model.BlogPosts.Count >= 1)
+{
+    <div class="row" style="padding-top:5%">
+        <div class="col-12">
+            <h1 style="text-align: center">Blog Posts</h1>
+        </div>
     </div>
-</div>
+}
+
 <div class="row">
     <div class="col-lg-2"></div>
     <div class="col-lg-8">
@@ -82,12 +82,15 @@ var user = db.Users.Find(userId);*/
     </div>
     <div class="col-lg-2"></div>
 </div>
-<div class="row" style="padding-top:5%">
-    <div class="col-12">
-        <h1 style="text-align: center">Comments</h1>
-    </div>
-</div>
 
+@if (Model.Comments.Count >= 1)
+{
+    <div class="row" style="padding-top:5%">
+        <div class="col-12">
+            <h1 style="text-align: center">Comments</h1>
+        </div>
+    </div>
+}
 @foreach (var comment in Model.Comments)
 {
     <div class="row" style="padding-top:2%">
@@ -132,60 +135,60 @@ var user = db.Users.Find(userId);*/
                 @Html.AntiForgeryToken()
                 @Html.Hidden("userId", Model.Id)
                 <!-- Modal body -->
-        <div class="modal-body">
-            <div class="row">
-                <div class="col-12">
-                    <img src=@Model.AvatarPath class="rounded-circle center" style="width: 15%; " />
-                </div>
-            </div>
-            <div class="row" style="padding-top:2%">
-                <div class="col-6">
-                    <h5 class="fa-pull-right">Avatar</h5>
-                </div>
-                <div class="col-4">
-                    <input name="image" type="file" class="form-control" id="fileUpload" />
-                </div>
-                <div class="col-2"></div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <h5 class="fa-pull-right">Display Name</h5>
-                </div>
-                <div class="col-4">
-                    @Html.TextBox("displayName", null, new { @class = "form-control" })
-                </div>
-                <div class="col-2"></div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <h5 class="fa-pull-right">First Name</h5>
-                </div>
-                <div class="col-4">
-                    @Html.TextBox("firstName", null, new { @class = "form-control" })
-                </div>
-                <div class="col-2"></div>
-            </div>
-            <div class="row">
-                <div class="col-6">
-                    <h5 class="fa-pull-right">Last Name</h5>
-                </div>
-                <div class="col-4">
-                    @Html.TextBox("lastName", null, new { @class = "form-control" })
-                </div>
-                <div class="col-2"></div>
-            </div>
-            <div class="row" style="padding-top: 2%">
-                <div class="col-12" style="display: flex; align-items: center; justify-content: center">
-                    <h5>About You</h5>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12" style="display: flex; align-items: center; justify-content: center">
-                    @Html.TextArea("aboutYou", new { @style = "width: 90%; height: 100px" })
-                </div>
-            </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <img src=@Model.AvatarPath class="rounded-circle center" style="width: 15%; " />
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:2%">
+                        <div class="col-6">
+                            <h5 class="fa-pull-right">Avatar</h5>
+                        </div>
+                        <div class="col-4">
+                            <input name="image" type="file" class="form-control" id="fileUpload" />
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 class="fa-pull-right">Display Name</h5>
+                        </div>
+                        <div class="col-4">
+                            @Html.TextBox("displayName", null, new { @class = "form-control" })
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 class="fa-pull-right">First Name</h5>
+                        </div>
+                        <div class="col-4">
+                            @Html.TextBox("firstName", null, new { @class = "form-control" })
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h5 class="fa-pull-right">Last Name</h5>
+                        </div>
+                        <div class="col-4">
+                            @Html.TextBox("lastName", null, new { @class = "form-control" })
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <div class="row" style="padding-top: 2%">
+                        <div class="col-12" style="display: flex; align-items: center; justify-content: center">
+                            <h5>About You</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12" style="display: flex; align-items: center; justify-content: center">
+                            @Html.TextArea("aboutYou", new { @style = "width: 90%; height: 100px" })
+                        </div>
+                    </div>
 
-        </div>
+                </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
