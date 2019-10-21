@@ -18,6 +18,7 @@ namespace Blog.Helpers
         {
             using (var smtp = new SmtpClient())
             {
+                smtp.UseDefaultCredentials = false;
                 var credential = new NetworkCredential
                 {
                     UserName = "mattpark102@outlook.com",
@@ -28,6 +29,7 @@ namespace Blog.Helpers
                 smtp.Port = 587;
                 smtp.EnableSsl = true;
                 smtp.Send(mailMessage);
+                
             }
         }
     }

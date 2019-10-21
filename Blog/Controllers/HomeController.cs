@@ -50,6 +50,7 @@ namespace Blog.Controllers // all controllers are inside this namespace
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Contact(EmailFormModel model)
         {
