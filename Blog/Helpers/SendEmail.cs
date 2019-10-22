@@ -27,7 +27,8 @@ namespace Blog.Helpers
                 };
                 smtp.Credentials = credential;
                 smtp.Host = "smtp-mail.outlook.com";
-                smtp.Port = 587;
+                smtp.Port = 25;
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtp.EnableSsl = true;
                 smtp.Send(mailMessage);
                 

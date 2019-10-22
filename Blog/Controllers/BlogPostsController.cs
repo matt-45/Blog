@@ -79,7 +79,8 @@ namespace Blog.Controllers
 
                 if (ImageUploadValidator.IsWebFriendlyImage(image))
                 {
-                    var fileName = $"{DateTime.Now.Ticks}_{Path.GetFileName(image.FileName)}";
+                    var sluggedFileName = StringUtilites.URLFriendly(Path.GetFileName(image.FileName));
+                    var fileName = $"{DateTime.Now.Ticks}_{sluggedFileName}";
                     image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
                     blogPost.MediaURL = "/Uploads/" + fileName;
                 }

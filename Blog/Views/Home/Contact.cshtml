@@ -6,11 +6,11 @@
         <div class="container">
             <div class="hero-banner hero-banner--sm">
                 <div class="hero-banner__content">
-                    <h1>Contact Us</h1>
+                    <h1>Contact Me</h1>
                     <nav aria-label="breadcrumb" class="banner-breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+                            <li class="breadcrumb-item active" aria-current="page">Contact</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,7 +22,7 @@
     <section class="section-margin--small section-margin">
         <div class="container">
 
-            <form action="#/" class="form-contact contact_form" method="post" id="contactForm" novalidate="novalidate">
+            <form action="#/" class="form-contact contact_form" action="contact_process.php" method="post" id="contactForm" novalidate="novalidate">
 
                 <div class="row">
                     <div class="col-md-4 col-lg-3 mb-4 mb-md-0">
@@ -48,6 +48,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     @using (Html.BeginForm())
                     {
