@@ -86,7 +86,7 @@ namespace Blog.Controllers
                 }
                 blogPost.AuthorId = User.Identity.GetUserId();
                 blogPost.Slug = Slug;
-                blogPost.Created = DateTime.Now;
+                blogPost.Created = DateTime.UtcNow;
                 db.BlogPosts.Add(blogPost);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -132,7 +132,7 @@ namespace Blog.Controllers
                 post.Slug = Slug;
                 post.Title = blogPost.Title;
                 post.Abstract = blogPost.Abstract;
-                post.Updated = DateTime.Now;
+                post.Updated = DateTime.UtcNow;
                 post.BlogPostBody = blogPost.BlogPostBody;
                 post.Comments = blogPost.Comments;
                 post.Author = blogPost.Author;
@@ -144,7 +144,7 @@ namespace Blog.Controllers
         }
 
         // GET: BlogPosts/Delete/5
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)

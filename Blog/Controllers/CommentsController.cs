@@ -66,7 +66,7 @@ namespace Blog.Controllers
             if (ModelState.IsValid)
             {
                 var parrentPost = db.BlogPosts.FirstOrDefault(p => p.Id == comment.BlogPostId);
-                comment.Created = DateTime.Now;
+                comment.Created = DateTime.UtcNow;
                 comment.CommentBody = commentBody;
                 comment.AuthorId = User.Identity.GetUserId();
                 comment.Author = db.Users.FirstOrDefault(u => u.Id == comment.AuthorId);
@@ -82,7 +82,6 @@ namespace Blog.Controllers
         }
 
         // GET: Comments/Edit/5
-        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -118,9 +117,8 @@ namespace Blog.Controllers
                     ModelState.AddModelError("CommentBody", "Invalid title");
                     return View(comment);
                 }
-
-                com.Created = comment.Created;
-                com.Updated = DateTime.Now;
+                comment.Created = DateTime.UtcNow;
+                com.Updated = DateTime.UtcNow;
                 com.CommentBody = comment.CommentBody;
                 db.SaveChanges();
                 return RedirectToAction("Details", "BlogPosts", new { slug = parrentPost.Slug});
@@ -132,7 +130,6 @@ namespace Blog.Controllers
         }
 
         // GET: Comments/Delete/5
-        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
